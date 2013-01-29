@@ -1,6 +1,8 @@
 package
 {
+    import starling.core.Starling;
     import starling.display.Image;
+    import starling.display.MovieClip;
     import starling.display.Sprite;
     import starling.textures.Texture;
     import starling.utils.AssetManager;
@@ -43,15 +45,44 @@ package
            
             assets.loadQueue(function onProgress(ratio:Number):void
             {
-                
+                trace(ratio);
                 // a progress bar should always show the 100% for a while,
                 // so we show the main menu only after a short delay. 
                 
-                if (ratio == 1){}
+                if (ratio == 1){
+					showCat();
+				}
                     
             });
         }
-        
+		
+		private function showCat():void
+		{
+			var textures:Vector.<Texture> = assets.getTextureAtlas("cat_run").getTextures("cat_run");
+			var cat_run:MovieClip = new MovieClip(textures);
+			
+			Starling.juggler.add( cat_run );
+			
+			addChild(cat_run);
+		}
+		
         public static function get assets():AssetManager { return sAssets; }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
     }
 }
