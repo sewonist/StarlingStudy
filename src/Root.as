@@ -1,9 +1,13 @@
 package
 {
     import starling.core.Starling;
+    import starling.display.Button;
     import starling.display.Image;
     import starling.display.MovieClip;
     import starling.display.Sprite;
+    import starling.events.Event;
+    import starling.text.BitmapFont;
+    import starling.text.TextField;
     import starling.textures.Texture;
     import starling.utils.AssetManager;
     
@@ -51,6 +55,8 @@ package
                 
                 if (ratio == 1){
 					showCat();
+					
+					initText();
 				}
                     
             });
@@ -60,29 +66,30 @@ package
 		{
 			var textures:Vector.<Texture> = assets.getTextureAtlas("cat_run").getTextures("cat_run");
 			var cat_run:MovieClip = new MovieClip(textures);
-			
+			cat_run.x = (Constants.STAGE_WIDTH - cat_run.width) / 2;
+			cat_run.y = 200;
 			Starling.juggler.add( cat_run );
 			
 			addChild(cat_run);
 		}
 		
+		private function initText():void
+		{
+			// 글씨가 텍스트폰트 안에 전부 안들어오면 보이지 않는다.
+			var bitmapText:TextField = new TextField(200, 80, "비트맵 텍스트", 
+				"NanumPen", 24, 0xffffff);
+			bitmapText.x = (Constants.STAGE_WIDTH - bitmapText.width) / 2;
+			bitmapText.y = 50;
+			addChild(bitmapText);
+			
+			var embedText:TextField = new TextField(250, 50, "임베드 텍스트", 
+				"YGO530", 24, 0);
+			embedText.x = (Constants.STAGE_WIDTH - embedText.width) / 2;
+			embedText.y = 100;
+			addChild(embedText);
+		}
+		
         public static function get assets():AssetManager { return sAssets; }
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
     }
 }

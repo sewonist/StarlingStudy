@@ -20,6 +20,10 @@ package
 	
 	public class StarlingStudy extends Sprite
 	{
+		// We embed the "Ubuntu" font. Beware: the 'embedAsCFF'-part IS REQUIRED!!!
+		[Embed(source="/fonts/YGO530.ttf", embedAsCFF="false", fontFamily="YGO530")]
+		private static const UbuntuRegular:Class;
+		
 		// Startup image for SD screens
 		[Embed(source="/startup.jpg")]
 		private static var Background:Class;
