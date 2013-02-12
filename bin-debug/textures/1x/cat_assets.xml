@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:66c08d905481e85bfc0697505bb03dae$ -->
+<TextureAtlas imagePath="cat_assets.png">
+    <SubTexture name="cat_run_0000_Layer-Comp-1" x="260" y="215" width="132" height="71" frameX="-3" frameY="-19" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0001_Layer-Comp-2" x="260" y="146" width="136" height="67" frameX="-5" frameY="-27" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0002_Layer-Comp-3" x="260" y="288" width="132" height="67" frameX="-4" frameY="-28" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0003_Layer-Comp-4" x="260" y="357" width="128" height="73" frameX="-7" frameY="-28" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0004_Layer-Comp-5" x="260" y="511" width="124" height="65" frameX="-9" frameY="-28" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0005_Layer-Comp-6" x="394" y="215" width="116" height="65" frameX="-15" frameY="-23" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0006_Layer-Comp-7" x="390" y="357" width="120" height="73" frameX="-15" frameY="-20" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0007_Layer-Comp-8" x="260" y="432" width="126" height="77" frameX="-12" frameY="-13" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0008_Layer-Comp-9" x="260" y="73" width="138" height="71" frameX="-13" frameY="-14" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="cat_run_0009_Layer-Comp-10" x="260" y="2" width="140" height="69" frameX="-14" frameY="-15" frameWidth="160" frameHeight="107"/>
+    <SubTexture name="ground" x="2" y="260" width="256" height="256"/>
+    <SubTexture name="sky" x="2" y="2" width="256" height="256"/>
+</TextureAtlas>

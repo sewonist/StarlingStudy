@@ -2,6 +2,7 @@ package
 {
     import starling.core.Starling;
     import starling.display.Image;
+    import starling.display.MovieClip;
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.textures.Texture;
@@ -25,8 +26,6 @@ package
 			addEventListener(Game.GAME_OVER,  onGameOver);
         }
 		
-		
-		
         public function start(background:Texture, assets:AssetManager):void
         {
             // the asset manager is saved as a static variable; this allows us to easily access
@@ -46,13 +45,17 @@ package
            
             assets.loadQueue(function onProgress(ratio:Number):void
             {
+				
+				
                 if (ratio == 1){
+					
 					Starling.juggler.delayCall(function():void
 					{
-						showScene(Menu);
+						showScene(CoordsSample);
 					}, 0.15);
+					
 				}
-                    
+				
             });
         }
 		
