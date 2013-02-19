@@ -1,10 +1,6 @@
 package
 {
 	
-	import com.fnicollet.BitmapDataCacher;
-	
-	import flash.display.BitmapData;
-	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import hype.framework.core.ObjectPool;
@@ -14,14 +10,11 @@ package
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Image;
-	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
-	import starling.textures.Texture;
 	
 	public class Game extends Sprite 
 	{
@@ -29,8 +22,12 @@ package
 		
 		private var _background:BackgroundSky;
 		private var _running_men:RunningMen;
+		
+		private var _coinPool:ObjectPool;
 		private var _rockPool:ObjectPool;
 		private var _obstacles:Dictionary;
+		private var _coins:Dictionary;
+		
 		private var _hitCount:int = 0;
 		private var _cameraShake:Number;
 		
@@ -51,15 +48,18 @@ package
 			_running_men.x = 60;
 			_running_men.y = 130;
 			addChild(_running_men);
+			
 			Starling.juggler.add( _running_men );
 			
 			_obstacles = new Dictionary;
 			
-			_rockPool = new ObjectPool( [Rock], 15 );
+			_rockPool = new ObjectPool( [Rock], 10 );
 			_rockPool.onRequestObject = function(clip:Rock):void {
+				// 초기화 
 				clip.x = 520;
 				clip.y = 220;
 				addChild(clip);
+				clip.spdX = -400 + (-200 * Math.random());
 				Starling.juggler.add(clip);
 				
 				_obstacles[clip] = clip;
@@ -71,8 +71,30 @@ package
 			var rhythm:SimpleRhythm = new SimpleRhythm(addNextClip);
 			rhythm.start(TimeType.TIME, 1000);
 			
+			_coinPool = new ObjectPool( [Coin], 100 );
+			_coinPool.onRequestObject = function(clip:Coin):void {
+				// 초기화 
+				clip.x = 520;
+				clip.y = 50;
+				addChild(clip);
+				Starling.juggler.add(clip);
+				
+				_obstacles[clip] = clip;
+				
+				var onExit:ExitStageTrigger = new ExitStageTrigger(onExitStage, clip, stage);
+				onExit.start();
+			}
+			var coinRhythm:SimpleRhythm = new SimpleRhythm(addCoin);
+			coinRhythm.start(TimeType.TIME, 100);
+			
+			
 			addEventListener(TouchEvent.TOUCH, onTouch);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		}
+		
+		private function addCoin(r:SimpleRhythm):void
+		{
+			_coinPool.request();
 		}
 		
 		private function onExitStage(clip:DisplayObjectContainer):void
@@ -88,6 +110,7 @@ package
 			delete _obstacles[clip]; 
 			
 			_rockPool.release(clip);
+			_coinPool.release(clip);
 		}
 		
 		private function addNextClip(r:SimpleRhythm):void
@@ -110,12 +133,15 @@ package
 		private function onEnterFrame(event:Event):void
 		{
 			var count:int = 0;
-			for(var clip:Rock in _obstacles){
-				if ( collisionWithBound(_running_men, clip) ){
+			for(var clip:Moveable in _obstacles){
+				
+				if ( collisionWithDistance(_running_men, clip) ){
 					trace('hit', _hitCount++);
 					destoryClip(clip);
-					_cameraShake = 20;
+					
+					if(clip is Rock) _cameraShake = 20;
 				}
+				
 			}
 			
 			shakeAnimation();
@@ -167,7 +193,6 @@ import starling.core.Starling;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.display.MovieClip;
-import starling.events.Event;
 import starling.textures.Texture;
 
 internal class Moveable extends DisplayObjectContainer implements IAnimatable
@@ -182,11 +207,11 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 	 */
 	public var MAXX:Number = 250;
 	public var MAXY:Number = 1400;
-	public var GRAV:Number = 1500;
+	public var GRAV:Number = 2000;
 	public var FLOAT:Number = 3000;
 	public var ACCEL:Number = 1600;
 	public var DRAG:Number = 800;
-	public var JUMP:Number = -1000;
+	public var JUMP:Number = -1200;
 	public var LEAP:Number = 1.5;
 	
 	/**
@@ -289,6 +314,19 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 	}
 }
 
+internal class Coin extends Moveable
+{	
+	public function Coin()
+	{
+		var texture:Texture = Root.assets.getTexture('coin');
+		var image:Image = new Image(texture);
+		addChild(image);
+		
+		GRAV = 0;
+		spdX = -500;
+	}
+}
+
 internal class Rock extends Moveable
 {	
 	public function Rock()
@@ -309,7 +347,7 @@ internal class RunningMen extends Moveable
 	public function RunningMen()
 	{
 		var textures:Vector.<Texture> = Root.assets.getTextureAtlas("running_men").getTextures("running_men");
-		_runningMen = new MovieClip(textures, 24);
+		_runningMen = new MovieClip(textures, 10);
 		addChild(_runningMen);
 		
 		Starling.juggler.add(_runningMen);
