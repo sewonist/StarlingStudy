@@ -84,7 +84,9 @@ package starling.textures
      */ 
     public class Texture
     {
-        private var mFrame:Rectangle;
+        public var bitmap:Bitmap;
+		
+		private var mFrame:Rectangle;
         private var mRepeat:Boolean;
         
         /** helper object */

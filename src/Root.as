@@ -1,8 +1,6 @@
 package
 {
     import starling.core.Starling;
-    import starling.display.Image;
-    import starling.display.MovieClip;
     import starling.display.Sprite;
     import starling.events.Event;
     import starling.textures.Texture;
@@ -37,7 +35,7 @@ package
             // 1) we need it right away, otherwise we have an empty frame
             // 2) the Startup class can decide on the right image, depending on the device.
             
-            addChild(new Image(background));
+            //addChild(new Image(background));
             
             // The AssetManager contains all the raw asset data, but has not created the textures
             // yet. This takes some time (the assets might be loaded from disk or even via the
@@ -45,17 +43,13 @@ package
            
             assets.loadQueue(function onProgress(ratio:Number):void
             {
-				
-				
-                if (ratio == 1){
-					
+				if (ratio == 1)
+				{
 					Starling.juggler.delayCall(function():void
 					{
-						showScene(CoordsSample);
+						showScene(Game);
 					}, 0.15);
-					
 				}
-				
             });
         }
 		

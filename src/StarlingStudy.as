@@ -3,8 +3,6 @@ package
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
@@ -18,13 +16,14 @@ package
 	import starling.utils.ScaleMode;
 	import starling.utils.formatString;
 	
+	[SWF(frameRate="60", width="480", height="320")]
 	public class StarlingStudy extends Sprite
 	{
 		// We embed the "Ubuntu" font. Beware: the 'embedAsCFF'-part IS REQUIRED!!!
 		[Embed(source="/fonts/YGO530.ttf", embedAsCFF="false", fontFamily="YGO530")]
 		private static const UbuntuRegular:Class;
 		
-		// Startup image for SD screens
+		// Startup image for SD screensø
 		[Embed(source="/startup.jpg")]
 		private static var Background:Class;
 		
@@ -57,7 +56,7 @@ package
 			
 			// create the AssetManager, which handles all required assets for this resolution
 			
-			var scaleFactor:int = viewPort.width < 480 ? 1 : 2; // midway between 320 and 640
+			var scaleFactor:int = viewPort.width < 480 ? 1 : 1; // midway between 320 and 640
 			var appDir:File = File.applicationDirectory;
 			var assets:AssetManager = new AssetManager(scaleFactor);
 			
@@ -87,7 +86,7 @@ package
 			background.width  = viewPort.width;
 			background.height = viewPort.height;
 			background.smoothing = true;
-			addChild(background);
+			//addChild(background);
 			
 			// launch Starling
 			
@@ -96,12 +95,13 @@ package
 			mStarling.stage.stageHeight = stageHeight; // <- same size on all devices!
 			mStarling.simulateMultitouch  = false;
 			mStarling.enableErrorChecking = Capabilities.isDebugger;
+			mStarling.showStats = true;
 			
 			mStarling.addEventListener(starling.events.Event.ROOT_CREATED, 
 				function onRootCreated(event:Object, app:Root):void
 				{
 					mStarling.removeEventListener(starling.events.Event.ROOT_CREATED, onRootCreated);
-					removeChild(background);
+					//removeChild(background);
 					
 					var bgTexture:Texture = Texture.fromBitmap(background, false, false, scaleFactor);
 					

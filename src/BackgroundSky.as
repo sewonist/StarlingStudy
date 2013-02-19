@@ -19,7 +19,7 @@ package
 			texture.repeat = true;
 			
 			setImage(new Image(texture));
-			xOffset = 2;
+			xOffset = 8;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
