@@ -346,7 +346,7 @@ internal class RunningMen extends Moveable
 	
 	public function RunningMen()
 	{
-		var textures:Vector.<Texture> = Root.assets.getTextureAtlas("running_men").getTextures("running_men");
+		var textures:Vector.<Texture> = Root.assets.getTextureAtlas("running_girl").getTextures("running_girl");
 		_runningMen = new MovieClip(textures, 10);
 		addChild(_runningMen);
 		
