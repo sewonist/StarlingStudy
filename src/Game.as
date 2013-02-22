@@ -45,8 +45,9 @@ package
 			addChild(_background);
 					
 			_running_men = new RunningMen;
+			_running_men.scaleX = _running_men.scaleY = .5;
 			_running_men.x = 60;
-			_running_men.y = 130;
+			_running_men.y = 180;
 			addChild(_running_men);
 			
 			Starling.juggler.add( _running_men );
@@ -57,7 +58,8 @@ package
 			_rockPool.onRequestObject = function(clip:Rock):void {
 				// 초기화 
 				clip.x = 520;
-				clip.y = 220;
+				clip.y = 190;
+				clip.scaleX = clip.scaleY = .8;
 				addChild(clip);
 				clip.spdX = -400 + (-200 * Math.random());
 				Starling.juggler.add(clip);
@@ -286,7 +288,7 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 	
 	public function collideFloor(x:Number, y:Number):Boolean
 	{
-		if( y > 150 ) return true;
+		if( y > 180 ) return true;
 		else return false;
 	}
 	
@@ -295,7 +297,7 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 	 */
 	protected function checkFloor():Boolean
 	{
-		if(y>150) onSolid = true;
+		if(y>180) onSolid = true;
 		else onSolid = false;
 		
 		return onSolid;

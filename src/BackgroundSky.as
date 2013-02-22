@@ -15,7 +15,7 @@ package
 		
 		override protected function init():void
 		{
-			var texture:Texture = Root.assets.getTexture("background");
+			var texture:Texture = Root.assets.getTexture("running_girl_bg");
 			texture.repeat = true;
 			
 			setImage(new Image(texture));

@@ -70,6 +70,9 @@ package
 			yy = ((yy/_image.height % 1)+1) ;
 			xx = ((xx/_image.width % 1)+1) ;
 			
+			//y size fix
+			_vRatio = 1;
+			
 			_image.setTexCoords(0, new Point(xx, yy));
 			_image.setTexCoords(1, new Point(xx + _hRatio, yy ));
 			_image.setTexCoords(2, new Point(xx, yy + _vRatio));
