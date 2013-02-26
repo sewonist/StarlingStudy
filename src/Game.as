@@ -77,7 +77,7 @@ package
 			_coinPool.onRequestObject = function(clip:Coin):void {
 				// 초기화 
 				clip.x = 520;
-				clip.y = 50;
+				clip.y = 100;
 				addChild(clip);
 				Starling.juggler.add(clip);
 				
@@ -104,7 +104,7 @@ package
 			destoryClip(clip);
 		}
 		
-		private function destoryClip(clip:DisplayObjectContainer):void
+		public function destoryClip(clip:DisplayObjectContainer):void
 		{
 			removeChild(clip);
 			
@@ -138,12 +138,14 @@ package
 			for(var clip:Moveable in _obstacles){
 				
 				if ( collisionWithDistance(_running_men, clip) ){
-					trace('hit', _hitCount++);
-					destoryClip(clip);
+//					trace('hit', _hitCount++);
 					
-					if(clip is Rock) _cameraShake = 20;
+					if(clip is Coin) Coin(clip).collision();
+					if(clip is Rock) { 
+						_cameraShake = 20;
+						Rock(clip).collision();
+					}
 				}
-				
 			}
 			
 			shakeAnimation();
@@ -190,11 +192,18 @@ package
 }
 
 
+
+import flash.events.Event;
+import flash.media.Sound;
+import flash.media.SoundChannel;
+
 import starling.animation.IAnimatable;
 import starling.core.Starling;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.display.MovieClip;
+import starling.events.Event;
+import starling.extensions.ParticleDesignerPS;
 import starling.textures.Texture;
 
 internal class Moveable extends DisplayObjectContainer implements IAnimatable
@@ -318,19 +327,71 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 
 internal class Coin extends Moveable
 {	
+	[Embed(source="/../embeds/p_coin.pex", mimeType="application/octet-stream")]
+	private const ParticleRef:Class;
+	
+	[Embed(source="/../embeds/star.png")]
+	private const TextureRef:Class;
+	
+	private var _coinImage:Image;
+	private var _particle:ParticleDesignerPS;
+	private var _coinSfx:Sound;
+	private var _invaildCollision:Boolean = true;
+	
 	public function Coin()
 	{
 		var texture:Texture = Root.assets.getTexture('coin');
-		var image:Image = new Image(texture);
-		addChild(image);
+		_coinImage = new Image(texture);
+		addChild(_coinImage);
 		
 		GRAV = 0;
 		spdX = -500;
+		
+		initParticle();
+		_coinSfx = Root.assets.getSound('coin');
+		
+		addEventListener(starling.events.Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+	}
+	
+	private function onRemovedFromStage(event:starling.events.Event):void
+	{
+		_particle.stop();
+		_coinImage.visible = true;
+		_invaildCollision = true;
+	}
+	
+	public function collision():void
+	{
+		if(_invaildCollision){
+			_invaildCollision = false;
+			_coinImage.visible = false;
+			_particle.emitterX = x;
+			_particle.emitterY = y-80;
+			_particle.start(.3);
+			_coinSfx.play();
+		}
+	}
+	
+	override public function advanceTime(time:Number):void
+	{
+		super.advanceTime(time);
+	}
+	
+	private function initParticle():void
+	{
+		var config:XML = XML(new ParticleRef);
+		var texture:Texture = Texture.fromBitmap(new TextureRef);
+		_particle = new ParticleDesignerPS(config, texture);
+		addChildAt(_particle, 1);
+		
+		Starling.juggler.add(_particle);
 	}
 }
 
 internal class Rock extends Moveable
 {	
+	private var _rockSfx:Sound;
+	private var _invaildCollision:Boolean = true;
 	public function Rock()
 	{
 		var texture:Texture = Root.assets.getTexture('Rock');
@@ -339,12 +400,31 @@ internal class Rock extends Moveable
 		
 		GRAV = 0;
 		spdX = -500;
+		
+		_rockSfx = Root.assets.getSound('rock');
+		
+		addEventListener(starling.events.Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+	}
+	
+	public function collision():void
+	{
+		if(_invaildCollision){
+			_invaildCollision = false;
+			_rockSfx.play();
+		}
+	}
+	
+	private function onRemovedFromStage(event:starling.events.Event):void
+	{
+		_invaildCollision = true;
 	}
 }
 
 internal class RunningMen extends Moveable 
 {
 	private var _runningMen:MovieClip;
+	private var _runSfx:Sound;
+	private var _runSfxChannel:SoundChannel;
 	
 	public function RunningMen()
 	{
@@ -353,6 +433,9 @@ internal class RunningMen extends Moveable
 		addChild(_runningMen);
 		
 		Starling.juggler.add(_runningMen);
+		
+		_runSfx = Root.assets.getSound('run');
+		_runSfxChannel = _runSfx.play(0, 9999);
 	}
 	
 	public function jumping():void

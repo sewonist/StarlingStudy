@@ -3,6 +3,8 @@ package
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.geom.Rectangle;
@@ -12,8 +14,10 @@ package
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
+	import starling.utils.HAlign;
 	import starling.utils.RectangleUtil;
 	import starling.utils.ScaleMode;
+	import starling.utils.VAlign;
 	import starling.utils.formatString;
 	
 	[SWF(frameRate="60", width="480", height="320")]
@@ -35,6 +39,13 @@ package
 		public function StarlingStudy()
 		{
 			super();
+			
+			if(stage)
+			{
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP_LEFT;
+			}
+			mouseEnabled = mouseChildren = false;
 			
 			var stageWidth:int   = Constants.STAGE_WIDTH;
 			var stageHeight:int  = Constants.STAGE_HEIGHT;
@@ -61,11 +72,12 @@ package
 			var assets:AssetManager = new AssetManager(scaleFactor);
 			
 			assets.verbose = Capabilities.isDebugger;
-			assets.enqueue(
-				appDir.resolvePath("audio"),
-				appDir.resolvePath(formatString("fonts/{0}x", scaleFactor)),
-				appDir.resolvePath(formatString("textures/{0}x", scaleFactor))
-			);
+//			assets.enqueue(
+//				appDir.resolvePath("audio"),
+//				appDir.resolvePath(formatString("fonts/{0}x", scaleFactor)),
+//				appDir.resolvePath(formatString("textures/{0}x", scaleFactor))
+//			);
+			
 			
 			// While Stage3D is initializing, the screen will be blank. To avoid any flickering, 
 			// we display a startup image now and remove it below, when Starling is ready to go.
@@ -96,6 +108,7 @@ package
 			mStarling.simulateMultitouch  = false;
 			mStarling.enableErrorChecking = Capabilities.isDebugger;
 			mStarling.showStats = true;
+			mStarling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
 			
 			mStarling.addEventListener(starling.events.Event.ROOT_CREATED, 
 				function onRootCreated(event:Object, app:Root):void
