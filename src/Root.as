@@ -47,7 +47,7 @@ package
 				{
 					Starling.juggler.delayCall(function():void
 					{
-						showScene(ParticleScreen);
+						showScene(Game);
 					}, 0.15);
 				}
             });

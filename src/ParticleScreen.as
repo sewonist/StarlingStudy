@@ -11,10 +11,10 @@ package
 	
 	public class ParticleScreen extends Sprite
 	{
-		[Embed(source="/../embeds/magic.pex", mimeType="application/octet-stream")]
+		[Embed(source="/../embeds/star.pex", mimeType="application/octet-stream")]
 		private const ParticleRef:Class;
 		
-		[Embed(source="/../embeds/magic.png")]
+		[Embed(source="/../embeds/star.png")]
 		private const TextureRef:Class;
 		private var _particle:PDParticleSystem;
 		
@@ -24,7 +24,7 @@ package
 			super();
 			
 			var background:Quad = new Quad(480, 320, 0);
-			//addChild(background);
+			addChild(background);
 			
 			initParticle();
 			
@@ -35,6 +35,7 @@ package
 		{
 			var config:XML = XML(new ParticleRef);
 			var texture:Texture = Texture.fromBitmap(new TextureRef);
+			
 			_particle = new PDParticleSystem(config, texture);
 			addChild(_particle);
 			

@@ -327,7 +327,7 @@ internal class Moveable extends DisplayObjectContainer implements IAnimatable
 
 internal class Coin extends Moveable
 {	
-	[Embed(source="/../embeds/p_coin.pex", mimeType="application/octet-stream")]
+	[Embed(source="/../embeds/star.pex", mimeType="application/octet-stream")]
 	private const ParticleRef:Class;
 	
 	[Embed(source="/../embeds/star.png")]
@@ -367,7 +367,7 @@ internal class Coin extends Moveable
 			_coinImage.visible = false;
 			_particle.emitterX = x;
 			_particle.emitterY = y-80;
-			_particle.start(.3);
+			_particle.start(.5);
 			_coinSfx.play();
 		}
 	}
@@ -375,6 +375,9 @@ internal class Coin extends Moveable
 	override public function advanceTime(time:Number):void
 	{
 		super.advanceTime(time);
+		
+		_particle.emitterX = x;
+		_particle.emitterY = y-80;
 	}
 	
 	private function initParticle():void
@@ -428,13 +431,13 @@ internal class RunningMen extends Moveable
 	
 	public function RunningMen()
 	{
+		_runSfx = Root.assets.getSound('run');
+		
 		var textures:Vector.<Texture> = Root.assets.getTextureAtlas("running_girl").getTextures("running_girl");
 		_runningMen = new MovieClip(textures, 10);
 		addChild(_runningMen);
 		
 		Starling.juggler.add(_runningMen);
-		
-		_runSfx = Root.assets.getSound('run');
 		_runSfxChannel = _runSfx.play(0, 9999);
 	}
 	
@@ -454,7 +457,7 @@ internal class RunningMen extends Moveable
 		super.advanceTime(time);
 		
 		if(onSolid){
-			_runningMen.fps = 24;
+			_runningMen.fps = 10;
 		}
 	}
 }

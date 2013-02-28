@@ -47,6 +47,8 @@ package
 			}
 			mouseEnabled = mouseChildren = false;
 			
+			initStageVideo();
+			
 			var stageWidth:int   = Constants.STAGE_WIDTH;
 			var stageHeight:int  = Constants.STAGE_HEIGHT;
 			var iOS:Boolean = Capabilities.manufacturer.indexOf("iOS") != -1;
@@ -72,11 +74,11 @@ package
 			var assets:AssetManager = new AssetManager(scaleFactor);
 			
 			assets.verbose = Capabilities.isDebugger;
-//			assets.enqueue(
-//				appDir.resolvePath("audio"),
-//				appDir.resolvePath(formatString("fonts/{0}x", scaleFactor)),
-//				appDir.resolvePath(formatString("textures/{0}x", scaleFactor))
-//			);
+			assets.enqueue(
+				appDir.resolvePath("audio"),
+				appDir.resolvePath(formatString("fonts/{0}x", scaleFactor)),
+				appDir.resolvePath(formatString("textures/{0}x", scaleFactor))
+			);
 			
 			
 			// While Stage3D is initializing, the screen will be blank. To avoid any flickering, 
@@ -130,6 +132,12 @@ package
 			
 			NativeApplication.nativeApplication.addEventListener(
 				flash.events.Event.DEACTIVATE, function (e:*):void { mStarling.stop(); });
+		}
+		
+		private function initStageVideo():void
+		{
+			// TODO Auto Generated method stub
+			
 		}
 		
 	}
