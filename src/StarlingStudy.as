@@ -23,10 +23,6 @@ package
 	[SWF(frameRate="60", width="480", height="320")]
 	public class StarlingStudy extends Sprite
 	{
-		// We embed the "Ubuntu" font. Beware: the 'embedAsCFF'-part IS REQUIRED!!!
-		[Embed(source="/fonts/YGO530.ttf", embedAsCFF="false", fontFamily="YGO530")]
-		private static const UbuntuRegular:Class;
-		
 		// Startup image for SD screensø
 		[Embed(source="/startup.jpg")]
 		private static var Background:Class;
@@ -34,7 +30,7 @@ package
 		// Startup image for HD screens
 		[Embed(source="/startupHD.jpg")]
 		private static var BackgroundHD:Class;
-		private var mStarling:Starling;
+		private var _starling:Starling;
 		
 		public function StarlingStudy()
 		{
@@ -47,7 +43,13 @@ package
 			}
 			mouseEnabled = mouseChildren = false;
 			
-			initStageVideo();
+			loaderInfo.addEventListener(flash.events.Event.COMPLETE, onCompleteLoaderInfo);
+		}
+		
+		protected function onCompleteLoaderInfo(event:flash.events.Event):void
+		{
+			stage.addEventListener(flash.events.Event.RESIZE, onResizeStage, false, int.MAX_VALUE, true);
+			
 			
 			var stageWidth:int   = Constants.STAGE_WIDTH;
 			var stageHeight:int  = Constants.STAGE_HEIGHT;
@@ -104,39 +106,52 @@ package
 			
 			// launch Starling
 			
-			mStarling = new Starling(Root, stage, viewPort);
-			mStarling.stage.stageWidth  = stageWidth;  // <- same size on all devices!
-			mStarling.stage.stageHeight = stageHeight; // <- same size on all devices!
-			mStarling.simulateMultitouch  = false;
-			mStarling.enableErrorChecking = Capabilities.isDebugger;
-			mStarling.showStats = true;
-			mStarling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
+			_starling = new Starling(Root, stage, viewPort);
+			_starling.stage.stageWidth  = stageWidth;  // <- same size on all devices!
+			_starling.stage.stageHeight = stageHeight; // <- same size on all devices!
+			_starling.simulateMultitouch  = false;
+			_starling.enableErrorChecking = Capabilities.isDebugger;
 			
-			mStarling.addEventListener(starling.events.Event.ROOT_CREATED, 
+			_starling.showStats = true;
+			
+			_starling.addEventListener(starling.events.Event.ROOT_CREATED, 
 				function onRootCreated(event:Object, app:Root):void
 				{
-					mStarling.removeEventListener(starling.events.Event.ROOT_CREATED, onRootCreated);
+					_starling.removeEventListener(starling.events.Event.ROOT_CREATED, onRootCreated);
 					//removeChild(background);
 					
 					var bgTexture:Texture = Texture.fromBitmap(background, false, false, scaleFactor);
 					
 					app.start(bgTexture, assets);
-					mStarling.start();
+					_starling.start();
 				});
 			
 			// When the game becomes inactive, we pause Starling; otherwise, the enter frame event
 			// would report a very long 'passedTime' when the app is reactivated. 
 			
 			NativeApplication.nativeApplication.addEventListener(
-				flash.events.Event.ACTIVATE, function (e:*):void { mStarling.start(); });
+				flash.events.Event.ACTIVATE, function (e:*):void { _starling.start(); });
 			
 			NativeApplication.nativeApplication.addEventListener(
-				flash.events.Event.DEACTIVATE, function (e:*):void { mStarling.stop(); });
+				flash.events.Event.DEACTIVATE, function (e:*):void { _starling.stop(); });
 		}
 		
-		private function initStageVideo():void
+		private function onResizeStage(event:flash.events.Event):void
 		{
-			// TODO Auto Generated method stub
+			trace(event);
+			
+			_starling.stage.stageWidth = stage.stageWidth;
+			_starling.stage.stageHeight = stage.stageHeight;
+			
+			const viewPort:Rectangle = _starling.viewPort;
+			viewPort.width = stage.stageWidth;
+			viewPort.height = stage.stageHeight;
+			try
+			{
+				_starling.viewPort = viewPort;
+			}
+			catch(error:Error) {}
+			
 			
 		}
 		

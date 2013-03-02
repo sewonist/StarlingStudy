@@ -47,7 +47,7 @@ package
 				{
 					Starling.juggler.delayCall(function():void
 					{
-						showScene(Game);
+						showScene(Menu);
 					}, 0.15);
 				}
             });

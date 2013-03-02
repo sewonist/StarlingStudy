@@ -1,4 +1,4 @@
-package
+package entity
 {
 	import starling.display.Image;
 	import starling.events.Event;
@@ -10,6 +10,8 @@ package
 		{
 			super();
 			
+			xOffset = 8;
+			
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
@@ -19,7 +21,6 @@ package
 			texture.repeat = true;
 			
 			setImage(new Image(texture));
-			xOffset = 8;
 			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}

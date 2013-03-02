@@ -764,7 +764,7 @@ package starling.core
                 
                 var stageWidth:int  = mStage.stageWidth;
                 var stageHeight:int = mStage.stageHeight;
-                
+				
                 mStatsDisplay.scaleX = mStatsDisplay.scaleY = scale;
                 
                 if (hAlign == HAlign.LEFT) mStatsDisplay.x = 0;

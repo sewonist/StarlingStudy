@@ -1,4 +1,4 @@
-package
+package entity
 {
 	import flash.geom.Point;
 	
